@@ -8,7 +8,7 @@ resource "google_kms_key_ring" "this" {
   location = "us-east1"
 }
 
-resouce "google_kms_crypto_key" "this" {
+resource "google_kms_crypto_key" "this" {
   name = var.key_name
   key_ring = google_kms_key_ring.this.id
   labels = var.labels

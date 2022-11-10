@@ -9,9 +9,31 @@ variable "gke_password" {
 }
  
 variable "project_id" {
-  description = ""
+  description = "project_id"
 }
 
 variable "region" {
   description = "region"
 }
+
+variable "cluster_name" {
+  description = "cluster_name"
+}
+
+variable "ip_cidr_range" {
+  description = "ip_cidr_range"
+}
+
+variable "bucket_name" {
+  description = "GCS Bucket name. Value should be unique ."
+  type        = string
+}
+
+variable "bucket_location" {
+  type        = string
+}
+
+variable "storage_class" {
+  type        = string
+}
+

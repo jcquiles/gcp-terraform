@@ -1,29 +1,48 @@
-#networking
-resource "google_compute_network" "vpc_network" {
-  project                 = "terraform-demo-357500"
-  name                    = "terraform-demo-vpc"
-  auto_create_subnetworks = true
-  mtu                     = 1460
+resource "google_compute_network" "vpc" {
+  name                    = var.vpc_name
+  auto_create_subnetworks = "false"
+  routing_mode            = "GLOBAL"
+  project                 = var.project
 }
-
-#security
-resource "google_compute_firewall" "default" {
-  name    = "sql-db-access"
-  network = "terraform-demo-vpc"
-
+resource "google_compute_firewall" "allow-internal" {
+  name                    = "${var.project}-fw-allow-internal"
+  network                 = "${google_compute_network.vpc.name}"
+  project                 = var.project
   allow {
     protocol = "icmp"
   }
-
   allow {
     protocol = "tcp"
-    ports    = ["1433", "8080", "443", "22"]
+    ports    = ["0-65535"]
   }
-
-  direction = "INGRESS"
-
-  source_ranges = ["10.148.0.0/20"] # needs to be changed
-
-  target_tags = ["sql-db"]
-
+  allow {
+    protocol = "udp"
+    ports    = ["0-65535"]
+  }
+  source_ranges = [
+    "${var.private_subnet_1}",
+    # "${var.private_subnet_2}",
+    "${var.public_subnet_1}",
+    # "${var.public_subnet_2}"
+  ]
 }
+resource "google_compute_firewall" "allow-http" {
+  name                    = "${var.project}-fw-allow-http"
+  network                 = "${google_compute_network.vpc.name}"
+  project                 = var.project
+allow {
+    protocol = "tcp"
+    ports    = ["80"]
+  }
+  target_tags = ["http"] 
+}
+resource "google_compute_firewall" "allow-bastion" {
+  name                    = "${var.project}-fw-allow-bastion"
+  network                 = "${google_compute_network.vpc.name}"
+  project                 = var.project
+  allow {
+    protocol = "tcp"
+    ports    = ["22"]
+  }
+  target_tags = ["ssh"]
+  }
