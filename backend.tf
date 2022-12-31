@@ -1,7 +1,7 @@
 terraform {
    backend "gcs" {
-     bucket  = "lido-terraform-state"
-     prefix  = "terraform/lido"
+     bucket  = "gke-autopilot-bucket"
+     prefix  = "terraform/gke"
    }
   required_providers {
     google = {

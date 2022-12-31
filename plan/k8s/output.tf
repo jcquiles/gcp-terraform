@@ -1,11 +1,11 @@
 output "kubernetes_cluster_name" {
-  value       = "lido"
+  value       = "gke"
 }
 
 output "region" {
-  value       = "asia-northeast1"
+  value       = "us-west1"
 }
 
 output "project_id" {
-  value       = "lido-360921"
+  value       = "argocd-373318"
 }
